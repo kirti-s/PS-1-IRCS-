@@ -1,0 +1,490 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EQAS</title>
+<link href="css/bootstrap-4.3.1.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+  body {
+      color: #404E67;
+      background: #F5F7FA;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.table-wrapper {
+  width: 700px;
+  margin: 30px auto;
+      background: #fff;
+      padding: 20px;	
+      box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  }
+  .table-title {
+      padding-bottom: 10px;
+      margin: 0 0 10px;
+      background-color: pink;
+  }
+  .table-title h2 {
+      margin: 6px 0 0;
+      font-size: 22px;
+  }
+  .table-title .add-new {
+      float: right;
+  height: 30px;
+  font-weight: bold;
+  font-size: 12px;
+  text-shadow: none;
+  min-width: 100px;
+  border-radius: 50px;
+  line-height: 13px;
+  }
+.table-title .add-new i {
+  margin-right: 4px;
+}
+  table.table {
+      table-layout: fixed;
+  }
+  table.table tr th, table.table tr td {
+      border-color: #e9e9e9;
+  }
+  table.table th i {
+      font-size: 13px;
+      margin: 0 5px;
+      cursor: pointer;
+  }
+  table.table th:last-child {
+      width: 100px;
+  }
+  table.table td a {
+  cursor: pointer;
+      display: inline-block;
+      margin: 0 5px;
+  min-width: 24px;
+  }    
+table.table td a.add {
+      color: #27C46B;
+  }
+  table.table td a.edit {
+      color: #FFC107;
+  }
+  table.table td a.delete {
+      color: #E34724;
+  }
+  table.table td i {
+      font-size: 19px;
+  }
+table.table td a.add i {
+      font-size: 24px;
+    margin-right: -1px;
+      position: relative;
+      top: 3px;
+  }    
+  table.table .form-control {
+      height: 32px;
+      line-height: 32px;
+      box-shadow: none;
+      border-radius: 2px;
+  }
+table.table .form-control.error {
+  border-color: #f50000;
+}
+table.table td .add {
+  display: none;
+}
+</style>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+    var actions = $("table td:last-child").html();
+    // Append table with add row form on add new button click
+      $(".add-new").click(function(){
+      $(this).attr("disabled", "disabled");
+      var index = $("table tbody tr:last-child").index();
+          var row = '<tr>' +
+              '<td><input type="text" class="form-control" name="code" id="code"></td>' +
+              '<td><input type="text" class="form-control" name="absorbance" id="absorbance"></td>' +
+              '<td><input type="text" class="form-control" name="cutoff" id="cutoff"></td>' +
+              '<td><input type="text" class="form-control" name="ratio" id="ratio"></td>'
+              '<td><input type="text" class="form-control" name="result" id="result"></td>'
+        '<td>' + actions + '</td>' +
+          '</tr>';
+        $("table").append(row);		
+      $("table tbody tr").eq(index + 1).find(".add, .edit").toggle();
+          $('[data-toggle="tooltip"]').tooltip();
+      });
+    // Add row on add button click
+    $(document).on("click", ".add", function(){
+      var empty = false;
+      var input = $(this).parents("tr").find('input[type="text"]');
+          input.each(function(){
+        if(!$(this).val()){
+          $(this).addClass("error");
+          empty = true;
+        } else{
+                  $(this).removeClass("error");
+              }
+      });
+      $(this).parents("tr").find(".error").first().focus();
+      if(!empty){
+        input.each(function(){
+          $(this).parent("td").html($(this).val());
+        });			
+        $(this).parents("tr").find(".add, .edit").toggle();
+        $(".add-new").removeAttr("disabled");
+      }		
+      });
+    // Edit row on edit button click
+    $(document).on("click", ".edit", function(){		
+          $(this).parents("tr").find("td:not(:last-child)").each(function(){
+        $(this).html('<input type="text" class="form-control" value="' + $(this).text() + '">');
+      });		
+      $(this).parents("tr").find(".add, .edit").toggle();
+      $(".add-new").attr("disabled", "disabled");
+      });
+    // Delete row on delete button click
+    $(document).on("click", ".delete", function(){
+          $(this).parents("tr").remove();
+      $(".add-new").removeAttr("disabled");
+      });
+  });
+  </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="#"><img src="https://i.ibb.co/zGBP0Fs/redcrosslogo.png" width="30" height="30" class="d-inline-block align-top" alt=""> Indian Red Cross Society</a>
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent1" aria-controls="navbarSupportedContent1" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+	  <div class="collapse navbar-collapse" id="navbarSupportedContent1">
+	    <ul class="navbar-nav mr-auto">
+	      <li class="nav-item active"><a class="nav-link" href="https://www.indianredcross.org/west-india.html" target="_blank">About Us<span class="sr-only">(current)</span></a> </li>
+        </ul>
+		<ul class="navbar-nav my-2 my-lg-0"><li class="nav-item"><a class="nav-link" href="login_page.html">Login</a> </li></ul>
+  </div>
+</nav>
+	<div class="row"><p> </p></div>
+	<div class="row"><p> </p></div>
+    <div class= "d-flex justify-content-around mt-2 shadow mb-3" id="buttonbar" >
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#details" aria-expanded="false" aria-controls="details">
+                    Lab Details
+                  </button>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#assay" aria-expanded="false" aria-controls="assay">
+                        ImmunoAssay Result
+                </button>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#extra" aria-expanded="false" aria-controls="extra">
+                            ExtraTest Result
+                    </button>
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#quality" aria-expanded="false" aria-controls="quality">
+                    Qualitative Analysis
+                         </button>
+            </div>
+            <div class="collapse" id="details">
+              <div class="container">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-8"><h2>Lab Details</h2></div>
+                            
+                        </div>
+                    </div>
+                    <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Contact Name">
+                                      <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="insti" aria-describedby="insti" placeholder="Institution">
+                                      <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="dept" aria-describedby="dept" placeholder="Department">
+                                      <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="add" aria-describedby="add" placeholder="Give Full Address">
+                                      <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="phone" aria-describedby="phone" placeholder="Telephone">
+                                      <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="fax" aria-describedby="fax" placeholder="Fax">
+                                      <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="mail" aria-describedby="mail" placeholder="Email">
+                                      <div class="row"><p> </p></div>
+                                      Were the samples were in good condition when recieved?
+                                      <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="sample" id="sample1" value="option1" checked>
+                                          <label class="form-check-label" for="sample1">
+                                           -----Yes
+                                          </label>
+                                        </div>
+                                        <div class="form-check">
+                                          <input class="form-check-input" type="radio" name="sample" id="sample2" value="option2">
+                                          <label class="form-check-label" for="sample2">
+                                            -----No
+                                          </label>
+                                        </div>
+                                        <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="no" aria-describedby="no" placeholder="If no, then enter comments. (e.g. leaked, fungal contamination)">
+                                      <div class="row"><p> </p></div>
+
+                </div>
+              </div>
+              </div>
+                  <div class="collapse" id="assay">
+                    <div class="container justify-content-center">
+                        <div class="container">
+                            <div class="table-wrapper">
+                                <div class="table-title">
+                                    <div class="row">
+                                        <div class="col-sm-8"><h2>ImmunoAssay <b>Results</b></h2></div>
+                                        
+                                    </div>
+                                </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Sample Code</th>
+                                            <th>Absorbance Values or Sample Rate (A)</th>
+                                            <th>Cutoff Value of Cutoff Rate (B)</th>
+                                            <th>Sample/Cutoff Ratio (A/B)</th>
+                                            <th>Test Interpretation</th>
+                                            <th>Edit</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            
+                                            <td>
+                                               <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>-----</td><td>-----</td><td>-----</td><td>-----</td><td>-----</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                               
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                        </tr>  
+                                        <tr>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>-----</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                        </tr>      
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>     
+                    </div>
+                    <div class="container">
+                      <div class="table-wrapper">
+                          <div class="table-title">
+                              <div class="row">
+                                  <div class="col-sm-8"><h2>Type of Assay Used</h2></div>
+                                  
+                              </div>
+                          </div>
+                          <select class="custom-select custom-select-lg mb-3">
+                              <option selected>Commercial Name of Assay</option>
+                              <option value="1">One</option>
+                              <option value="2">Two</option>
+                              <option value="3">Three</option>
+                            </select>
+                            <select class="custom-select custom-select-lg mb-3">
+                                <option selected>Name of Manufacturer</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                              </select>
+                              <input type="text" class="form-control" id="assayno" aria-describedby="assayno" placeholder="Assay Kit Master Lot Number">
+                              <div class="row"><p> </p></div>
+                              <input type="text" class="form-control" id="expdt" aria-describedby="expdt" placeholder="Expiry Date">
+                              <div class="row"><p> </p></div>
+                              <table class="table table-bordered">
+                                  <thead>
+                                      <tr>
+                                          <th>Assay Conditions</th>
+                                          <th>Temperature (in Celcius)</th>
+                                          <th>Time (hr:min)</th>
+                                          <th>Edit</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr>
+                                          <td>Sample Incubation</td>
+                                          <td>------</td>
+                                          <td>------</td>
+                                          <td>
+                                <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                              <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                              
+                                          </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Conjugate Incubation</td>
+                                            <td>------</td>
+                                            <td>------</td>
+                                            <td>
+                                  <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                              <td>Substrate Incubation</td>
+                                              <td>------</td>
+                                              <td>------</td>
+                                              <td>
+                                    <a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
+                                                  <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                                                  
+                                              </td>
+                                            </tr>
+
+                              
+                                  </tbody>
+                              </table>
+                              <div class="row"><p> </p></div>
+                              Please tick the incubation condition that applies. The microplate was incubated:
+                              <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                                  <label class="form-check-label" for="exampleRadios1">
+                                   -----in a water bath
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                  <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                                  <label class="form-check-label" for="exampleRadios2">
+                                    -----in an incubator
+                                  </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios3" value="option3">
+                                    <label class="form-check-label" for="exampleRadios3">
+                                      -----on a bench
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                      <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios4" value="option4">
+                                      <label class="form-check-label" for="exampleRadios4">
+                                        -----in a dedicated machine
+                                      </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios5" value="option5">
+                                        <label class="form-check-label" for="exampleRadios5">
+                                          -----Other
+                                        </label>
+                                      </div>
+                                      <div class="row"><p> </p></div>
+                                      <input type="text" class="form-control" id="other" aria-describedby="other" placeholder="Give Details">
+                                      <div class="row"><p> </p></div>
+
+                      </div>
+                    </div>
+                    <div class="container">
+                      <div class="table-wrapper">
+                          <div class="table-title">
+                              <div class="row">
+                                  <div class="col-sm-8"><h2>Operator Details</h2></div>
+                                  
+                              </div>
+                          </div>
+                          <input type="text" class="form-control" id="opname" aria-describedby="opname" placeholder="Name of Operator">
+                          <div class="row"><p> </p></div>
+                                  <input type="text" class="form-control" id="opdt" aria-describedby="opdt" placeholder="Date">
+                                  
+                                  <input type="text" class="form-control" id="comment" aria-describedby="comment" placeholder="Comments">
+                      </div>
+                    </div>
+          </div>
+          <div class="collapse" id="extra">
+                <div class="card card-body">
+                    check3
+                  Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                </div>
+              </div>
+              <div class="collapse" id="quality">
+                    <div class="card card-body">
+                        check4
+                      Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+                    </div>
+                  </div>
+          
+            
+	
+	
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap-4.3.1.js"></script>
+</body>
+</html>
