@@ -66,9 +66,9 @@ $headers = 'From: '.$email_from."\r\n".
 @mail($email_to, $email_subject, $email_message, $headers);  
 ?>
 
+Thank you for enrolling in the EQAS programme. Please use the following credentials for login. Your username is <?php echo "$id"; ?> and password is <?php echo "$password"; ?> .
  
-Thank you for contacting us. We will be in touch with you very soon.
- 
+
 <?php
  
 }
